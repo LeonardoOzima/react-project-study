@@ -17,8 +17,6 @@ app.post("/users", async (req, res) => {
       email: req.body.email,
     },
   });
-
-  users.push(req.body);
   res.status(201).send("User added successfully");
 });
 

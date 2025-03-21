@@ -1,7 +1,13 @@
 import React from "react";
-import UserType from "../Interfaces/UserType";
+import UserType from "../Interfaces/UserTypes";
+import { UserBackendType } from "../Interfaces/UserTypes";
+import api from "../../../Services/api";
 
-export default function UserBlock(user: UserType) {
+export default function UserBlock(user: UserBackendType) {
+  async function handleDeleteUser(id: string) {
+    await api.delete(`/users/${id}`);
+    console.log("Usuário deletado com sucesso");
+  }
   return (
     <>
       <div className="bg-slate-700 text-white p-4 rounded-lg">
@@ -10,7 +16,7 @@ export default function UserBlock(user: UserType) {
         <h3>{user.email} </h3>
         <div className="bg-white text-black rounded-md">
           <button>Editar</button>
-          <button>Excluir</button>
+          <button onClick={() => handleDeleteUser(user.id)}>Excluir</button>
         </div>
       </div>
     </>
