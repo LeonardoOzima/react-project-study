@@ -27,6 +27,7 @@ function UserForm() {
             placeholder="Idade"
             className="input-style"
           />
+          <button type="button">Cadastrar</button>
         </div>
       </form>
     </>
