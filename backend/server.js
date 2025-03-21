@@ -1,10 +1,13 @@
 import express from "express";
+import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const app = express();
+
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:3001" }));
 
 app.post("/users", async (req, res) => {
   await prisma.user.create({
@@ -14,8 +17,6 @@ app.post("/users", async (req, res) => {
       email: req.body.email,
     },
   });
-
-  users.push(req.body);
   res.status(201).send("User added successfully");
 });
 
