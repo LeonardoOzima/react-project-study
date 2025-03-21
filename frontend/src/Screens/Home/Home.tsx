@@ -1,15 +1,16 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserForm from "./Components/UserForm";
 import UserType from "./Interfaces/UserType";
 import UserBlock from "./Components/UserBlock";
 import api from "../../Services/api";
 
 function Home() {
-  let users: UserType[] = [];
+  const [users, setUsers] = useState<UserType[]>([]);
 
   async function getUsers() {
-    users = await api.get("/users");
+    const resFromApi = await api.get("/users");
+    setUsers(resFromApi.data);
   }
 
   useEffect(() => {
