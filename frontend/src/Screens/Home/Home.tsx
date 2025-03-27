@@ -4,6 +4,7 @@ import UserForm from "./Components/UserForm";
 import { UserBackendType } from "./Interfaces/UserTypes";
 import UserBlock from "./Components/UserBlock";
 import api from "../../Services/api";
+import Navbar from "./Components/Navbar";
 
 function Home() {
   const [users, setUsers] = useState<UserBackendType[]>([]);
@@ -19,6 +20,7 @@ function Home() {
 
   return (
     <>
+      <Navbar />
       <UserForm />
       {users.map((user) => (
         <UserBlock key={user.id} {...user} />

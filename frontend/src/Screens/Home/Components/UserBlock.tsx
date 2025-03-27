@@ -8,6 +8,7 @@ export default function UserBlock(user: UserBackendType) {
     await api.delete(`/users/${id}`);
     console.log("Usuário deletado com sucesso");
   }
+
   return (
     <>
       <div className="bg-slate-700 text-white p-4 rounded-lg">
