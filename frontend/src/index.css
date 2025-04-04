@@ -7,6 +7,18 @@
     @apply p-2 border rounded-md shadow-inner bg-gray-100 
            focus:outline-none focus:ring-2 focus:ring-blue-300;
   }
+  .sidebar-icon {
+    @apply relative flex items-center justify-center h-16 w-16 mx-auto bg-gray-700 
+    text-white hover:bg-white hover:text-gray-800 rounded-3xl hover:rounded-xl 
+    transition-all duration-300 ease-linear cursor-pointer;
+  }
+  .sidebar-text {
+    @apply absolute w-auto p-2 m-2 min-w-max left-16
+    rounded-md shadow-md
+    text-white bg-gray-700
+    text-xs font-bold
+    transition-all duration-100 scale-0 origin-left;
+  }
 }
 
 body {
