@@ -1,10 +1,27 @@
-import { Button } from "@/components/ui/button";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+import Home from "./Screens/Home/Home";
+import About from "./Screens/About/About";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />, // adicione uma tela aqui
+  },
+  {
+    path: "/about",
+    element: <About />,
+  },
+]);
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-svh">
-      <Button>Click me</Button>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 
