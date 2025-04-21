@@ -1,5 +1,4 @@
 import React from "react";
-import UserType from "../Interfaces/UserTypes";
 import { UserBackendType } from "../Interfaces/UserTypes";
 import { FaRegTrashAlt } from "react-icons/fa";
 import api from "../../../Services/api";
