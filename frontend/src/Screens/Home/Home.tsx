@@ -7,11 +7,21 @@ import UserLine from "./Components/UserLine";
 import api from "../../Services/api";
 import Navbar from "./Components/Navbar";
 import UserBlock from "./Components/UserBlock";
-import { DataTable } from "../data-table";
+import { DataTable } from "../../components/data-table";
 import { createColumnHelper, ColumnDef } from "@tanstack/react-table";
 import { usersData } from "@/lib/data";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import DefaultHeader from "@/components/default-header";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreVertical } from "lucide-react";
 function Home() {
   const { data: users, isLoading, isError, error } = useUsersQuery();
   const columnHelper = createColumnHelper<UserType>();
@@ -35,25 +45,51 @@ function Home() {
           aria-label="Select row"
         />
       ),
+      enableSorting: false,
+      enableHiding: false,
     }),
     columnHelper.accessor("name", {
-      header: "Name",
+      header: (info) => <DefaultHeader info={info} name="Name" />,
       cell: (info) => info.getValue(), // string
     }),
     columnHelper.accessor("email", {
-      header: "Email",
+      header: (info) => <DefaultHeader info={info} name="Email" />,
       cell: (info) => info.getValue(), // string
     }),
     columnHelper.accessor("age", {
-      header: "Age",
+      header: (info) => <DefaultHeader info={info} name="Age" />,
       cell: (info) => info.getValue(), // number
+    }),
+    columnHelper.display({
+      id: "more",
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"ghost"}>
+                <MoreVertical></MoreVertical>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
+              <DropdownMenuLabel className="">Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Copy</DropdownMenuItem>
+              <DropdownMenuItem>Paste</DropdownMenuItem>
+              <DropdownMenuItem>Cut</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     }),
   ] as ColumnDef<UserType>[];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen">
+      {/* Navbar */}
       <Navbar />
-      <main className="flex-1 flex flex-col items-center p-4">
+
+      {/* Content */}
+      <div className="flex-1 ml-[16.666%] md:ml-[8.333%] p-4 flex flex-col gap-4">
         <UserForm />
         <UserBlock>
           {isLoading ? (
@@ -68,7 +104,7 @@ function Home() {
           columns={columns}
           data={usersData}
         />
-      </main>
+      </div>
     </div>
   );
 }
