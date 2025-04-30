@@ -1,6 +1,16 @@
 // src/pages/Home/Components/UserDataTable.tsx
 
-import React from "react";
+import React, { useState } from "react";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 import { createColumnHelper, ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -23,6 +33,8 @@ interface UserDataTableProps {
 
 export default function UserDataTable({ data }: UserDataTableProps) {
   const columnHelper = createColumnHelper<UserType>();
+  const [openDialog, setOpenDialog] = useState<"edit" | "delete" | null>(null);
+  const [selectedRow, setSelectedRow] = useState<UserType | null>(null);
 
   const columns: ColumnDef<UserType>[] = [
     columnHelper.display({
@@ -61,17 +73,34 @@ export default function UserDataTable({ data }: UserDataTableProps) {
     columnHelper.display({
       id: "more",
       cell: ({ row }) => {
+        const user = row.original;
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"ghost"}>
-                <MoreVertical></MoreVertical>
+                <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
-              <DropdownMenuLabel className="">Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Copy</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSelectedRow(user);
+                  setOpenDialog("edit");
+                }}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSelectedRow(user);
+                  setOpenDialog("delete");
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
               <DropdownMenuItem>Paste</DropdownMenuItem>
               <DropdownMenuItem>Cut</DropdownMenuItem>
             </DropdownMenuContent>
@@ -81,5 +110,57 @@ export default function UserDataTable({ data }: UserDataTableProps) {
     }),
   ] as ColumnDef<UserType>[];
 
-  return <DataTable<UserType, string | number> columns={columns} data={data} />;
+  return (
+    <>
+      <DataTable<UserType, string | number> columns={columns} data={data} />
+
+      {/* Edit Dialog */}
+      <Dialog
+        open={openDialog === "edit"}
+        onOpenChange={(open) => {
+          if (!open) setOpenDialog(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>
+              Editing user: {selectedRow?.name}
+              <br />
+              Email: {selectedRow?.email}
+              <br />
+              Age: {selectedRow?.age}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="submit">Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Dialog */}
+      <Dialog
+        open={openDialog === "delete"}
+        onOpenChange={(open) => {
+          if (!open) setOpenDialog(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              {selectedRow?.name}
+              <br /> This action cannot be undone. This will permanently delete
+              the user and remove them from the list.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="destructive" type="submit">
+              Confirm Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 }
